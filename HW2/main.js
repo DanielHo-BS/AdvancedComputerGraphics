@@ -1,8 +1,13 @@
+// Student: Ho Bo Sheng
+// Student ID: M11107309
+// Date: 2023/10/12
+
+//Set the globle var
 var render
 var scene
 var camera
 
-function animateFrame() {
+function animateFrame() { //Animation
     //Get the object from scene
     var centerOfRotation = new THREE.Vector3(100, 50, 0);
     const rotationAxis = new THREE.Vector3(0, 0, 1);
@@ -21,15 +26,17 @@ function animateFrame() {
     requestAnimationFrame(animateFrame)
 }
 
-function Rotation(mesh, rotationAxis, rotationSpeed, centerOfRotation) {
+function Rotation(mesh, rotationAxis, rotationSpeed, centerOfRotation) { //Rotation
     // Set the center of rotation
     mesh.position.sub(centerOfRotation);
+    // Rotate the object
     var rotationMatrix  = new THREE.Matrix4().makeRotationAxis(rotationAxis, rotationSpeed);
     mesh.applyMatrix4(rotationMatrix);
+    // Reset the center of rotation
     mesh.position.add(centerOfRotation);
 }
 
-function Dodecagon(centerX, centerY, centerZ, radius, numSides) {
+function Dodecagon(centerX, centerY, centerZ, radius, numSides) { //Dodecagon
     //Dodecagon (as vertices)
     var angle = (2 * Math.PI) / numSides;
     var vertices = [];
@@ -41,8 +48,6 @@ function Dodecagon(centerX, centerY, centerZ, radius, numSides) {
 
         vertices.push(new THREE.Vector3(x, y, z));
     }
-
-    vertices
 
     //Dodecagon (as indices)
     var indices = [
@@ -71,7 +76,8 @@ function Dodecagon(centerX, centerY, centerZ, radius, numSides) {
     return new THREE.Mesh(geometry, material);
 }
 
-function Diamond(centerX, centerY, centerZ, radius, color) {
+function Diamond(centerX, centerY, centerZ, radius, color) { //Diamond
+    //Diamond (as vertices)
     var vertices = [];
     vertices.push(new THREE.Vector3(centerX, centerY, centerZ));  //0
     vertices.push(new THREE.Vector3(centerX, centerY - 25, centerZ)); //1
@@ -100,7 +106,7 @@ function main() {
     camera = new THREE.OrthographicCamera(640 / - 2, 640 / 2, 480 / 2, 480 / - 2, -1000, 1000);
     camera.position.set(0, 0, 5);
 
-    //Create Mesh 
+    //Create Meshs 
     var mesh = Dodecagon(0, 0, 0, 150, 12);
     mesh.name = 'circle'
     var mesh2 = Diamond(0, 0, 2, 1, 0x004B97);
@@ -114,7 +120,7 @@ function main() {
     mesh2.position.set(100, 50, 0)
     mesh3.position.set(100, 50, 0)
 
-    //Set rotation >> 3:00
+    //Initial rotation of the object 
     mesh2.rotateZ(45 / 180 * Math.PI);
     mesh3.rotateZ(135 / 180 * Math.PI);
 
@@ -135,6 +141,7 @@ function main() {
     render.setSize(640, 480);
     document.body.appendChild(render.domElement);
 
+    //Animation
     animateFrame();
 }
 
