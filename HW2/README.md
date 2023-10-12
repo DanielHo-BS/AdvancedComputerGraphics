@@ -85,7 +85,7 @@ npm install three
 
 Watch the video
 
-[![Watch the video](./clock.png)](https://youtu.be/bM1XUi3g194)
+[![Watch the video](./clock.png)](https://youtu.be/B283oqLbY8A)
 
 ## Reference
 
