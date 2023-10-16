@@ -27,12 +27,12 @@ function animateFrame() { //Animation
 }
 
 function Rotation(mesh, rotationAxis, rotationSpeed, centerOfRotation) { //Rotation
-    // Set the center of rotation
+    // Set the center of object to the origin (0,0,0)
     mesh.position.sub(centerOfRotation);
     // Rotate the object
     var rotationMatrix  = new THREE.Matrix4().makeRotationAxis(rotationAxis, rotationSpeed);
     mesh.applyMatrix4(rotationMatrix);
-    // Reset the center of rotation
+    // Reset the center of object to the original position (100,50,0)
     mesh.position.add(centerOfRotation);
 }
 
