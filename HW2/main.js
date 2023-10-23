@@ -40,7 +40,6 @@ function Dodecagon(centerX, centerY, centerZ, radius, numSides) { //Dodecagon
     //Dodecagon (as vertices)
     var angle = (2 * Math.PI) / numSides;
     var vertices = [];
-    vertices.push(new THREE.Vector3(centerX, centerY, centerZ));  // center of the circle
     for (let i = 0; i < numSides; i++) {
         const x = centerX + radius * Math.cos(i * angle);
         const y = centerY + radius * Math.sin(i * angle);
@@ -50,20 +49,10 @@ function Dodecagon(centerX, centerY, centerZ, radius, numSides) { //Dodecagon
     }
 
     //Dodecagon (as indices)
-    var indices = [
-        0, 1, 2,
-        2, 3, 0,
-        0, 3, 4,
-        4, 5, 0,
-        0, 5, 6,
-        6, 7, 0,
-        0, 7, 8,
-        8, 9, 0,
-        0, 9, 10,
-        10, 11, 0,
-        0, 11, 12,
-        12, 1, 0
-    ];
+    var indices = [];
+    for (let i = 1; i < numSides; i++) {
+        indices.push(0, i, i + 1);
+    }
 
     //geometry
     var geometry = new THREE.BufferGeometry().setFromPoints(vertices);
