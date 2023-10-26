@@ -46,10 +46,11 @@ const calculateRotation = (currentPosition, targetPosition) => {
     // Calculate the pitch, roll and yaw angles (Euler angles)
     const yaw = Math.atan2(-direction.x, direction.y);
     const pitch = Math.atan2(direction.z, Math.sqrt(direction.x * direction.x + direction.y * direction.y));
+    const roll = 0;
 
     // Calculate the target quaternion based on the smoothed pitch and yaw
     const targetQuaternion = new THREE.Quaternion();
-    targetQuaternion.setFromEuler(new THREE.Euler(0, pitch, yaw));
+    targetQuaternion.setFromEuler(new THREE.Euler(roll, pitch, yaw));
 
     // Slerp the current quaternion towards the target quaternion for smooth rotation
     const interpolationFactor = 0.15; // Adjust as needed
@@ -58,21 +59,7 @@ const calculateRotation = (currentPosition, targetPosition) => {
     return targetQuaternion;
 };
 
-
-function main() {
-    // Scene (as globle var)
-    scene = new THREE.Scene();
-
-    // Camera (as globle var)
-    camera = new THREE.OrthographicCamera(640 / - 2, 640 / 2, 480 / 2, 480 / - 2, -1000, 1000);
-    camera.position.set(0, 0, 300);
-    camera.lookAt(0, 0, 0);
-
-    // Mesh (still local var, we will retrive it by getObjectByName)
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('../node_modules/three/examples/jsm/libs/draco/');
-
-    // Load the TrackCenter.xyz text file and parse the data.
+function loadTrackCenterPoints() {
     var TrackCenter = new XMLHttpRequest();
     TrackCenter.open("GET", "./TrackCenter.xyz", false);
     TrackCenter.send(null);
@@ -86,6 +73,23 @@ function main() {
         TrackCenterPoints.push(new THREE.Vector3(TrackCenterLine[0], TrackCenterLine[1], TrackCenterLine[2]));
         TrackCenterNormals.push(new THREE.Vector3(TrackCenterLine[3], TrackCenterLine[4], TrackCenterLine[5]));
     }
+};
+
+function main() {
+    // Scene (as globle var)
+    scene = new THREE.Scene();
+
+    // Camera (as globle var)
+    camera = new THREE.OrthographicCamera(640 / - 2, 640 / 2, 480 / 2, 480 / - 2, -1000, 1000);
+    camera.position.set(0, 0, 300);
+    camera.lookAt(0, 0, 0);
+
+    // Load the TrackCenter.xyz text file and parse the data.
+    loadTrackCenterPoints()
+
+    // Mesh (still local var, we will retrive it by getObjectByName)
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('../node_modules/three/examples/jsm/libs/draco/');
 
     // Load a glTF resource
     var gltfLoader = new GLTFLoader()
@@ -126,7 +130,7 @@ function main() {
     // Render
     render = new THREE.WebGLRenderer();
     render.setClearColor(0x888888, 1.0);
-    render.setSize(640, 480);
+    render.setSize(640 * 1.5, 480 * 1.5);
     document.body.appendChild(render.domElement);
 
     // Animate
