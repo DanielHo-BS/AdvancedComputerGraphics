@@ -3,4 +3,5 @@
 *.docx
 */lib
 */*/lib
+lib
 node_modules
