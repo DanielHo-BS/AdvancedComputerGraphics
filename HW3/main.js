@@ -1,3 +1,7 @@
+// Desciption: This is the main file for HW3
+// Author: Ho Bo Sheng
+// Student ID: M11107309 
+// Last update: 2023/11/15
 import * as THREE from 'three';
 import { GLTFLoader } from 'GLTFLoader';
 import { DRACOLoader } from 'DRACOLoader';
@@ -18,15 +22,16 @@ function animateFrame()
     var light  = scene.getObjectByName('Mylihght',true)
     if (light)
     {
+        // Rotation with respect to the center of object along the y-axis
         Rotation(light, rotationAxis, rotationSpeed, centerOfRotation);
         Rotation(camera2, rotationAxis, rotationSpeed, centerOfRotation);
-        light.lookAt(110,40,10)
     }
 
-    controls.update();    
-    render.render(scene,camera2);
-
-    controls.update();    
+    controls.update();
+    // Change the camera to the first view   
+    // render.render(scene,camera);
+    // Change the camera to the second view
+    render.render(scene,camera2);  
     
     requestAnimationFrame(animateFrame)
 }
@@ -38,7 +43,7 @@ function Rotation(mesh, rotationAxis, rotationSpeed, centerOfRotation) { //Rotat
     // Rotate the object
     var rotationMatrix  = new THREE.Matrix4().makeRotationAxis(rotationAxis, rotationSpeed);
     mesh.applyMatrix4(rotationMatrix);
-    // Reset the center of object to the original position (100,50,0)
+    // Reset the center of object to the original position (110, 40, 10)
     mesh.position.add(centerOfRotation);
 }
 
@@ -53,6 +58,7 @@ function main()
     camera.lookAt(0,0,0)
     scene.add(camera);
 
+    //camera2 (as globle var) for the second view
     camera2 = new THREE.PerspectiveCamera(45, (window.innerWidth-16) / (window.innerHeight-16), 5, 3000)
     camera2.position.set(170,40,10);
     camera2.lookAt(110,40,-60)
@@ -73,36 +79,25 @@ function main()
     loader.setDRACOLoader( dracoLoader );
     
     loader.load('./Earth.glb', function(glb) {
- 
         var mesh = glb.scene 
-       
         var box = new THREE.Box3().setFromObject( mesh );
         var center = box.getCenter( new THREE.Vector3() );
-        
-        console.log(center) // 110,40,10
-   
+        console.log(center) // Center point of the Earth : 110,40,10
+        mesh.name = 'MyEarth'
         scene.add(mesh)
     })
     
-    //
+    //Init the axis helper
     var axisHelper = new THREE.AxesHelper(100);
     scene.add(axisHelper);
 
+    //Light (as globle var)
     var light = new THREE.SpotLight( 0xffffff, 10, 0, 45*Math.PI/180, 0, 0.1)
     light.name = 'Mylihght'
-    
-    light.castShadow = true;
-
-    light.shadow.mapSize.width = 64;
-    light.shadow.mapSize.height = 64;
-
-    light.shadow.camera.near = 1;
-    light.shadow.camera.far = 1000;
-    light.shadow.camera.fov = 45
+    //Initial position
     light.position.set(300,40,300)
     light.lookAt(110,40,10)
     Rotation(light, rotationAxis, rotationSpeed*45, centerOfRotation);
-    
     scene.add(light)
 
 
@@ -113,6 +108,7 @@ function main()
     
     document.body.appendChild(render.domElement);
     
+    // Control (as globle var)
     controls = new OrbitControls( camera, render.domElement);
     //controls.autoRotate = true;
     
