@@ -7,3 +7,5 @@ Here show some notes about Computer Graphics.
 ## [HW2](./HW2/)
 
 ## [HW3](./HW3/)
+
+## [Midterm Project](./MidtermProject/)
